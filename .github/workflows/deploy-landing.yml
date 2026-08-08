@@ -1,5 +1,5 @@
-name: deploy-funzocoinkids_admin
-run-name: ${{ github.actor }} is deploying funzocoinkids_admin
+name: deploy-funzocoinkids_landing
+run-name: ${{ github.actor }} is deploying funzocoinkids_landing
 
 on:
   push:
