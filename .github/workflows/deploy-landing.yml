@@ -29,7 +29,7 @@ jobs:
             sudo find "$DEPLOY_BASE" -type d -exec chmod 2770 {} \;
 
             # Clone the repository into the release directory
-            git clone https://${{ secrets.USER_KEY }}@github.com/nickfff-dev/funzocoinkids_admin.git "$RELEASE_DIR"
+            git clone https://${{ secrets.USER_KEY }}@github.com/nickfff-dev/funzocoinkids_landing.git "$RELEASE_DIR"
             cd "$RELEASE_DIR"
 
             cat <<EOF > .env.local
