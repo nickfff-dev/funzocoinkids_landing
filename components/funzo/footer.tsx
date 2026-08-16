@@ -105,10 +105,10 @@ export function Footer() {
             {[
               ["About", "#about"],
               ["Programs", "#pillars"],
-              ["Impact", "#impact"],
-              ["Investors", "#investors"],
               ["Events", "#events"],
-              ["Ethics", "#ethics"],
+              ["Impact", "#impact"],
+              ["Trust Centre", "#trust"],
+              ["Investors", "#investors"],
             ].map(([l, h]) => (
               <li key={l}>
                 <a
@@ -173,6 +173,13 @@ export function Footer() {
             </Button>
           </form>
         </div>
+      </div>
+
+      <div className="border-t py-5 px-4 text-center text-xs text-muted-foreground max-w-3xl mx-auto">
+        FunzoCoin Kids is an education initiative focused on children&apos;s
+        learning in AI, financial literacy, blockchain, digital safety,
+        creativity and innovation. Nothing on this site is an offer of
+        financial products, tokens or investment services.
       </div>
 
       <div className="border-t py-6 text-center text-xs text-muted-foreground px-4">

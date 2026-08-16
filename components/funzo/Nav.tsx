@@ -7,9 +7,10 @@ import { Button } from "@/components/ui/button";
 const links = [
   { href: "#about", label: "About" },
   { href: "#pillars", label: "Programs" },
-  { href: "#impact", label: "Impact" },
-  { href: "#investors", label: "Invest" },
   { href: "#events", label: "Events" },
+  { href: "#impact", label: "Impact" },
+  { href: "#trust", label: "Trust" },
+  { href: "#investors", label: "Invest" },
   { href: "#contact", label: "Contact" },
 ];
 
@@ -38,10 +39,10 @@ export function Nav() {
       <div className="mx-auto max-w-7xl px-4">
         <div className={`flex items-center justify-between rounded-2xl px-4 sm:px-6 py-3 transition-all ${scrolled ? "glass glow-shadow" : ""}`}>
           <a href="#top" className="flex items-center gap-2.5 font-display font-bold text-lg">
-            <img src={'/assets/funzo-logo.png'} alt="FunzoCoin Kids" className="h-10 w-10 drop-shadow-[0_4px_12px_rgba(212,160,23,0.35)]" />
+            <img src={"/assets/funzo-logo.png"} alt="FunzoCoin Kids" className="h-10 w-10 drop-shadow-[0_4px_12px_rgba(212,160,23,0.35)]" />
             <span className="brand-text text-xl">FunzoCoin Kids</span>
           </a>
-          <nav className="hidden lg:flex items-center gap-7 text-sm font-medium">
+          <nav className="hidden lg:flex items-center gap-6 text-sm font-medium">
             {links.map((l) => (
               <a key={l.href} href={l.href} className="text-muted-foreground hover:text-foreground transition-colors">
                 {l.label}
@@ -56,7 +57,7 @@ export function Nav() {
             >
               {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             </button>
-            <Button  className="hidden sm:inline-flex gradient-bg animated-gradient text-white border-0">
+            <Button className="hidden sm:inline-flex gradient-bg animated-gradient text-white border-0">
               <a href="#contact" target="_blank" rel="noopener noreferrer">Partner With Us</a>
             </Button>
             <button

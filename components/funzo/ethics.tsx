@@ -4,24 +4,25 @@ import { motion } from "framer-motion";
 
 import {
   Brain,
-
   Shield,
-
   ArrowRight,
-
   CheckCircle2,
   Globe2,
-
   Building2,
-
   Lock,
   FileText,
-
+  Users2,
+  Landmark,
+  ScrollText,
 } from "lucide-react";
 import { Section, SectionHeader } from "./shared";
 
-
-
+/**
+ * Trust Centre — consolidates safeguarding, privacy, AI-safety, governance
+ * and financial-accountability positioning into one place, per the site
+ * assessment (Priority 3). Keeping the export/file name `Ethics` so
+ * existing imports in page.tsx don't need to change.
+ */
 export function Ethics() {
   const items = [
     {
@@ -40,8 +41,13 @@ export function Ethics() {
     },
     {
       icon: Brain,
-      title: "Ethical AI Education",
-      desc: "AI literacy taught with a focus on bias, consent, transparency and responsible, age-appropriate use.",
+      title: "Ethical & Responsible AI",
+      desc: "AI literacy taught with a focus on bias, consent, transparency and responsible, age-appropriate use — never framed as financial or investment guidance.",
+    },
+    {
+      icon: Users2,
+      title: "Child Participation & Consent",
+      desc: "Every child engages under appropriate parental/guardian consent, with age-appropriate framing and the right to opt out at any time.",
     },
     {
       icon: CheckCircle2,
@@ -54,6 +60,16 @@ export function Ethics() {
       desc: "Built to meet Ministry of Education, data protection and CSR governance standards for institutional partners.",
     },
     {
+      icon: Landmark,
+      title: "Governance",
+      desc: "A defined leadership structure and advisory oversight so the organization is built to outlast any single founder.",
+    },
+    {
+      icon: ScrollText,
+      title: "Financial Accountability",
+      desc: "Programme and donor reporting practices designed for transparency with sponsors, partners and regulators.",
+    },
+    {
       icon: Globe2,
       title: "Regulatory-Aligned",
       desc: "Designed to partner with fintech, education and innovation sandboxes across the region.",
@@ -61,12 +77,21 @@ export function Ethics() {
   ];
 
   return (
-    <Section id="ethics">
+    <Section id="trust">
       <SectionHeader
-        eyebrow="Policies · Ethics · Compliance"
+        eyebrow="Trust Centre"
         title="Built on trust. Designed for scale."
-        sub="Public safeguarding and data-protection policies underpin every workshop, classroom and digital activity."
+        sub="Public safeguarding, privacy, AI-safety and governance commitments underpin every workshop, classroom and digital activity."
       />
+
+      <div className="mb-10 rounded-2xl border border-dashed border-[var(--purple-glow)]/40 p-5 sm:p-6 text-sm text-muted-foreground max-w-3xl mx-auto text-center">
+        <strong className="text-foreground">FunzoCoin Kids is an education initiative.</strong>{" "}
+        We focus on children&apos;s education in AI, financial literacy,
+        blockchain, digital safety, creativity and innovation. Our educational
+        activities are designed to build knowledge and skills and should not
+        be interpreted as an offer of financial products, tokens, or
+        investment services.
+      </div>
 
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
         {items.map((i, idx) => (
@@ -82,13 +107,9 @@ export function Ethics() {
               <i.icon className="h-5 w-5" />
             </div>
 
-            <h3 className="font-semibold">
-              {i.title}
-            </h3>
+            <h3 className="font-semibold">{i.title}</h3>
 
-            <p className="text-sm text-muted-foreground mt-1 flex-1">
-              {i.desc}
-            </p>
+            <p className="text-sm text-muted-foreground mt-1 flex-1">{i.desc}</p>
 
             {i.to && (
               <Link
@@ -111,12 +132,8 @@ export function Ethics() {
           <div className="h-12 w-12 rounded-xl gradient-bg flex items-center justify-center text-white shrink-0">
             <FileText className="h-5 w-5" />
           </div>
-
           <div>
-            <div className="font-semibold">
-              Child Safeguarding Policy
-            </div>
-
+            <div className="font-semibold">Child Safeguarding Policy</div>
             <div className="text-sm text-muted-foreground">
               Protecting every child — principles, code of conduct, reporting.
             </div>
@@ -130,12 +147,8 @@ export function Ethics() {
           <div className="h-12 w-12 rounded-xl gradient-bg flex items-center justify-center text-white shrink-0">
             <FileText className="h-5 w-5" />
           </div>
-
           <div>
-            <div className="font-semibold">
-              Data Protection &amp; Privacy Policy
-            </div>
-
+            <div className="font-semibold">Data Protection &amp; Privacy Policy</div>
             <div className="text-sm text-muted-foreground">
               Kenya DPA-aligned data handling, consent and parental rights.
             </div>
