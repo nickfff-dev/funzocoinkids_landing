@@ -174,13 +174,15 @@ export function Footer() {
           </form>
         </div>
       </div>
-
-      <div className="border-t py-5 px-4 text-center text-xs text-muted-foreground max-w-3xl mx-auto">
+            <div className="border-t py-5 px-4 text-center">
+               <div className="max-w-3xl mx-auto text-center text-xs text-muted-foreground">
         FunzoCoin Kids is an education initiative focused on children&apos;s
         learning in AI, financial literacy, blockchain, digital safety,
         creativity and innovation. Nothing on this site is an offer of
         financial products, tokens or investment services.
       </div>
+            </div>
+     
 
       <div className="border-t py-6 text-center text-xs text-muted-foreground px-4">
         © {new Date().getFullYear()} FunzoCoin Kids. All rights reserved.

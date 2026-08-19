@@ -35,7 +35,7 @@ export function Modal({
   return (
     <AnimatePresence>
       {open && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+        <div className=" flex items-center justify-center p-4">
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -53,7 +53,7 @@ export function Modal({
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.96, y: 12 }}
             transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
-            className={`relative w-full ${widthClass} max-h-[88vh] overflow-y-auto rounded-3xl glass border border-white/10 p-6 sm:p-8 glow-shadow`}
+            className={`absolute z-[10000] w-full ${widthClass} max-h-[88vh] overflow-y-auto rounded-3xl glass border border-white/10 p-6 sm:p-8 glow-shadow`}
           >
             <button
               type="button"

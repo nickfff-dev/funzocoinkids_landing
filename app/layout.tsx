@@ -1,13 +1,9 @@
-import { Geist, Geist_Mono, JetBrains_Mono,Montserrat } from "next/font/google"
-
+import { Montserrat } from "next/font/google"
 import "./globals.css"
-import { ThemeProvider } from "@/components/theme-provider"
 import { cn } from "@/lib/utils";
+import { Footer } from "../components/funzo/footer";
+import { Nav } from "@/components/funzo/Nav";
 
-const fontSans = Geist({
-  subsets: ["latin"],
-  variable: "--font-sans",
-})
 
 const montserrat = Montserrat({subsets:['latin'],variable:'--font-mono'})
 
@@ -20,10 +16,12 @@ export default function RootLayout({
     <html
       lang="en"
       suppressHydrationWarning
-      className={cn("antialiased", fontSans.variable, "font-mono", montserrat.variable)}
+      className={cn("antialiased", montserrat.variable, "font-mono", )}
     >
       <body>
-        <ThemeProvider>{children}</ThemeProvider>
+        <Nav/>
+        <main>{children}</main>
+        <Footer/>
       </body>
     </html>
   )

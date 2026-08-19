@@ -52,7 +52,7 @@ export function PartnerTrigger({
   return (
     <>
       <Button
-        size="sm"
+        size="lg"
         variant={variant}
         className={
           className ??

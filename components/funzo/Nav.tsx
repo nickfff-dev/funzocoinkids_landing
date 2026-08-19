@@ -40,7 +40,7 @@ export function Nav() {
         <div className={`flex items-center justify-between rounded-2xl px-4 sm:px-6 py-3 transition-all ${scrolled ? "glass glow-shadow" : ""}`}>
           <a href="#top" className="flex items-center gap-2.5 font-display font-bold text-lg">
             <img src={"/assets/funzo-logo.png"} alt="FunzoCoin Kids" className="h-10 w-10 drop-shadow-[0_4px_12px_rgba(212,160,23,0.35)]" />
-            <span className="brand-text text-xl">FunzoCoin Kids</span>
+            <span className="brand-text text-xl">Funzo</span>
           </a>
           <nav className="hidden lg:flex items-center gap-6 text-sm font-medium">
             {links.map((l) => (

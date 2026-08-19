@@ -66,11 +66,9 @@ export default function Landing() {
   return (
     <div
       id="top"
-      className="min-h-screen bg-background text-foreground overflow-x-hidden"
+      className="min-h-screen bg-background text-foreground overflow-x-hidden overflow-y-auto"
     >
-      <Nav />
-
-      <main>
+      
         <Hero />
         <Partners />
         <About />
@@ -83,9 +81,8 @@ export default function Landing() {
         <Ethics />
         <Testimonials />
         <FinalCTA />
-      </main>
 
-      <Footer />
+  
     </div>
   );
 }
