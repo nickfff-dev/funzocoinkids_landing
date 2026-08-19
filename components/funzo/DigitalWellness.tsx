@@ -1,3 +1,6 @@
+import { Button } from "../ui/button";
+import { EnquiryModal } from "./enquiries";
+import { RegistrationForm } from "./registration-form";
 
 const features = [
   { title: "Smart Screen Time", description: "Helping children develop healthy and productive technology habits through guided digital learning.", icon: "⏰" },
@@ -126,7 +129,24 @@ export function DigitalWellness() {
             future-ready skills, creativity, and responsible technology use.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <a
+            <EnquiryModal
+              title="Enroll a Learner to FunzoCoin Kids Program"
+              description="Tell us about the child you'd like to register."
+              trigger={
+                <Button
+                  variant='link'
+                  style={{ color: "var(--brand-navy)" }}
+                  className="bg-white text-lg font-bold px-8 py-8 rounded-2xl transition-all duration-300 shadow-lg hover:scale-105 hover:no-underline"
+
+                >
+                  Join the Safe Digital Future
+                </Button>
+              }
+            >
+              <RegistrationForm />
+            </EnquiryModal>
+
+            {/* <a
               href='#contact'
               target="_blank"
               rel="noopener noreferrer"
@@ -134,7 +154,7 @@ export function DigitalWellness() {
               style={{ color: "var(--brand-navy)" }}
             >
               Join the Safe Digital Future
-            </a>
+            </a> */}
             <a
               href="#about"
               className="border-2 border-white text-white hover:bg-white text-lg font-bold px-8 py-4 rounded-2xl transition-all duration-300 hover:text-[color:var(--brand-navy)]"

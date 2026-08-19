@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { Moon, Sun, Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { PartnershipForm } from "./partnership-form";
+import { EnquiryModal } from "./enquiries";
 
 const links = [
   { href: "#about", label: "About" },
@@ -32,9 +34,8 @@ export function Nav() {
 
   return (
     <header
-      className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${
-        scrolled ? "py-2" : "py-4"
-      }`}
+      className={`fixed top-0 inset-x-0 z-50 transition-all duration-300 ${scrolled ? "py-2" : "py-4"
+        }`}
     >
       <div className="mx-auto max-w-7xl px-4">
         <div className={`flex items-center justify-between rounded-2xl px-4 sm:px-6 py-3 transition-all ${scrolled ? "glass glow-shadow" : ""}`}>
@@ -57,9 +58,18 @@ export function Nav() {
             >
               {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
             </button>
-            <Button className="hidden sm:inline-flex gradient-bg animated-gradient text-white border-0">
-              <a href="#contact" target="_blank" rel="noopener noreferrer">Partner With Us</a>
-            </Button>
+            <EnquiryModal
+              title="Partner With FunzoCoin Kids"
+              description="Tell us a little about your organization and how you'd like to get involved."
+              trigger={
+                <Button className="hidden sm:inline-flex gradient-bg animated-gradient text-white border-0">
+                  Partner With Us
+                </Button>
+              }
+            >
+              <PartnershipForm />
+            </EnquiryModal>
+
             <button
               aria-label="Toggle menu"
               className="lg:hidden h-9 w-9 inline-flex items-center justify-center rounded-lg hover:bg-muted"

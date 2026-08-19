@@ -10,6 +10,8 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { Section } from "./shared";
+import { EnquiryModal } from "./enquiries";
+import { PartnershipForm } from "./partnership-form";
 
 export function Investors() {
   const offers = [
@@ -44,19 +46,18 @@ export function Investors() {
               </p>
 
               <div className="mt-6 flex flex-wrap gap-3">
-                <Button
-                  size="lg"
-                  className="gradient-bg animated-gradient text-white border-0 glow-shadow"
+                <EnquiryModal
+                  title="Request a Partnership Pitch Deck"
+                  description="Tell us a little about your organization and how you'd like to get involved."
+                  trigger={
+                    <Button size="lg"
+                      className="gradient-bg animated-gradient text-white border-0 glow-shadow">
+                      Request Partnership Deck
+                    </Button>
+                  }
                 >
-                  <a
-                    href="#contact"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <Download className="mr-2 h-4 w-4" />
-                    Request Partnership Deck
-                  </a>
-                </Button>
+                  <PartnershipForm />
+                </EnquiryModal>
 
                 <Button
                   size="lg"
@@ -64,7 +65,7 @@ export function Investors() {
                   className="border-2"
                 >
                   <a
-                    href="#contact"
+                    href="https://calendly.com/qendev87/funzo-ecosystem"
                     target="_blank"
                     rel="noopener noreferrer"
                   >

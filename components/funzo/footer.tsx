@@ -1,9 +1,12 @@
 "use client";
 
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   Globe2,
+  AlertCircle,
+  CheckCircle2,
   Mail,
   MapPin,
   MessageCircle,
@@ -13,6 +16,35 @@ import Link from "next/link";
 import { InstagramLogoIcon, TwitterLogoIcon, LinkedinLogoIcon, FacebookLogoIcon, XLogoIcon, YoutubeLogoIcon } from "@phosphor-icons/react"
 
 export function Footer() {
+  const [newsletterStatus, setNewsletterStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
+
+  async function handleNewsletterSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setNewsletterStatus("submitting");
+
+    const formData = new FormData(e.currentTarget);
+    const email = String(formData.get("email") || "");
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "");
+
+    if (!apiUrl) {
+      setNewsletterStatus("error");
+      return;
+    }
+
+    try {
+      const response = await fetch(`${apiUrl}/newsletter`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email }),
+      });
+
+      if (!response.ok) throw new Error("Newsletter subscription failed");
+      setNewsletterStatus("success");
+    } catch {
+      setNewsletterStatus("error");
+    }
+  }
+
   return (
     <footer className="border-t bg-card/50">
       <div className="mx-auto max-w-7xl px-4 py-16 grid lg:grid-cols-4 gap-10">
@@ -36,15 +68,6 @@ export function Footer() {
           </p>
 
           <div className="mt-5 space-y-2 text-sm">
-            <a
-              href="#contact"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 text-muted-foreground hover:text-foreground"
-            >
-              <MessageCircle className="h-4 w-4" />
-              WhatsApp Chat
-            </a>
 
             <a
               href="tel:+254710641703"
@@ -157,32 +180,50 @@ export function Footer() {
 
           <form
             className="flex gap-2"
-            onSubmit={(e) => e.preventDefault()}
+            onSubmit={handleNewsletterSubmit}
           >
-            <Input
-              type="email"
-              placeholder="you@example.com"
-              required
-            />
+            {newsletterStatus === "success" ? (
+              <div className="flex min-h-10 flex-1 items-center gap-2 rounded-lg border border-[var(--cyan-glow)]/30 bg-[var(--cyan-glow)]/10 px-3 text-sm text-[var(--cyan-glow)]">
+                <CheckCircle2 className="h-4 w-4 shrink-0" />
+                <span>Thanks for joining the loop.</span>
+              </div>
+            ) : (
+              <>
+                <Input
+                  name="email"
+                  type="email"
+                  placeholder="you@example.com"
+                  required
+                  disabled={newsletterStatus === "submitting"}
+                />
 
-            <Button
-              type="submit"
-              className="gradient-bg text-white border-0"
-            >
-              Join
-            </Button>
+                <Button
+                  type="submit"
+                  disabled={newsletterStatus === "submitting"}
+                  className="gradient-bg text-white border-0"
+                >
+                  {newsletterStatus === "submitting" ? "Joining..." : "Join"}
+                </Button>
+              </>
+            )}
           </form>
+          {newsletterStatus === "error" && (
+            <p className="mt-2 flex items-center gap-1.5 text-xs text-[var(--gold)]" role="alert">
+              <AlertCircle className="h-3.5 w-3.5 shrink-0" />
+              We couldn&apos;t subscribe you right now. Please try again.
+            </p>
+          )}
         </div>
       </div>
-            <div className="border-t py-5 px-4 text-center">
-               <div className="max-w-3xl mx-auto text-center text-xs text-muted-foreground">
-        FunzoCoin Kids is an education initiative focused on children&apos;s
-        learning in AI, financial literacy, blockchain, digital safety,
-        creativity and innovation. Nothing on this site is an offer of
-        financial products, tokens or investment services.
+      <div className="border-t py-5 px-4 text-center">
+        <div className="max-w-3xl mx-auto text-center text-xs text-muted-foreground">
+          FunzoCoin Kids is an education initiative focused on children&apos;s
+          learning in AI, financial literacy, blockchain, digital safety,
+          creativity and innovation. Nothing on this site is an offer of
+          financial products, tokens or investment services.
+        </div>
       </div>
-            </div>
-     
+
 
       <div className="border-t py-6 text-center text-xs text-muted-foreground px-4">
         © {new Date().getFullYear()} FunzoCoin Kids. All rights reserved.

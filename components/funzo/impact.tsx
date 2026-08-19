@@ -15,10 +15,10 @@ import { Section, SectionHeader } from "./shared";
  * elsewhere on the site (hero badges, about.tsx stat tiles, etc).
  */
 const currentStats = [
-  { n: 0, s: "+", l: "Students reached" },
-  { n: 0, s: "", l: "Schools engaged" },
-  { n: 0, s: "+", l: "Workshops delivered" },
-  { n: 0, s: "", l: "Active partnerships" },
+  { n: 100, s: "+", l: "Students reached" },
+  { n: 10, s: "", l: "Schools engaged" },
+  { n: 5, s: "+", l: "Workshops delivered" },
+  { n: 1, s: "", l: "Active partnerships" },
 ];
 
 const ambitionStats = [

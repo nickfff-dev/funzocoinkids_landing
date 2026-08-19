@@ -17,6 +17,9 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { Section, SectionHeader } from "./shared";
+import { EnquiryModal } from "./enquiries";
+import { PartnershipForm } from "./partnership-form";
+import { RegistrationForm } from "./registration-form";
 
 /**
  * ---------------------------------------------------------------------------
@@ -26,7 +29,11 @@ import { Section, SectionHeader } from "./shared";
  * see assessment feedback, Priority 1 (verify all public-facing numbers/claims).
  * ---------------------------------------------------------------------------
  */
-
+type CtaConfig = {
+  label: string;
+  /** Sponsor CTA only. Defaults to `label` when omitted. */
+  presetInterest?: string;
+};
 type EventItem = {
   slug: string;
   emoji: string;
@@ -38,8 +45,8 @@ type EventItem = {
   ageGroup: string;
   format?: string;
   focus: string[];
-  primaryCta: { label: string; href: string };
-  sponsorCta: { label: string; href: string };
+  primaryCta: CtaConfig;
+  sponsorCta: CtaConfig;
   color: string;
 };
 
@@ -74,8 +81,8 @@ const CATEGORIES: EventCategory[] = [
           "AI safety and ethics",
           "Online safety & digital citizenship",
         ],
-        primaryCta: { label: "Register Your Child", href: "#contact" },
-        sponsorCta: { label: "Sponsor a Child", href: "#contact" },
+        primaryCta: { label: "Register Your Child" },
+        sponsorCta: { label: "Sponsor a Child", presetInterest: "Sponsor a Child" },
         color: "var(--electric)",
       },
       {
@@ -96,8 +103,8 @@ const CATEGORIES: EventCategory[] = [
           "Intro to Web3 concepts",
           "Responsible digital participation",
         ],
-        primaryCta: { label: "Register", href: "#contact" },
-        sponsorCta: { label: "Become a Technology Partner", href: "#contact" },
+        primaryCta: { label: "Register", presetInterest: "Register For Event" },
+        sponsorCta: { label: "Become a Technology Partner", presetInterest: "Technology Partnership" },
         color: "var(--purple-glow)",
       },
       {
@@ -117,8 +124,8 @@ const CATEGORIES: EventCategory[] = [
           "Innovation challenges",
           "Teacher & parent engagement",
         ],
-        primaryCta: { label: "Invite Us to Your School", href: "#contact" },
-        sponsorCta: { label: "Sponsor a School", href: "#contact" },
+        primaryCta: { label: "Invite Us to Your School", },
+        sponsorCta: { label: "Sponsor a School", presetInterest: "Sponsor a School" },
         color: "var(--cyan-glow)",
       },
     ],
@@ -145,8 +152,8 @@ const CATEGORIES: EventCategory[] = [
           "Community wellbeing",
           "Artificial Intelligence",
         ],
-        primaryCta: { label: "Join the Challenge", href: "#contact" },
-        sponsorCta: { label: "Sponsor FunzoHack", href: "#contact" },
+        primaryCta: { label: "Join the Challenge" },
+        sponsorCta: { label: "Sponsor FunzoHack", presetInterest: "FunzoHack" },
         color: "var(--purple-glow)",
       },
       {
@@ -165,8 +172,8 @@ const CATEGORIES: EventCategory[] = [
           "Confidence & teamwork",
           "Innovation mindset",
         ],
-        primaryCta: { label: "Participate", href: "#contact" },
-        sponsorCta: { label: "Become a Creative Partner", href: "#contact" },
+        primaryCta: { label: "Participate", },
+        sponsorCta: { label: "Become a Creative Partner", presetInterest: "Creative Partnership" },
         color: "var(--gold)",
       },
       {
@@ -184,8 +191,8 @@ const CATEGORIES: EventCategory[] = [
           "Digital and non-digital solutions",
           "Mentorship from industry judges",
         ],
-        primaryCta: { label: "Enter the Challenge", href: "#contact" },
-        sponsorCta: { label: "Judge or Mentor", href: "#contact" },
+        primaryCta: { label: "Enter the Challenge",  },
+        sponsorCta: { label: "Judge or Mentor", presetInterest: "Mentorship" },
         color: "var(--electric)",
       },
     ],
@@ -213,8 +220,8 @@ const CATEGORIES: EventCategory[] = [
           "Creativity challenges",
           "Teamwork & leadership",
         ],
-        primaryCta: { label: "Register", href: "#contact" },
-        sponsorCta: { label: "Sponsor the Event", href: "#contact" },
+        primaryCta: { label: "Register", },
+        sponsorCta: { label: "Sponsor the Event", presetInterest: "Sponsor an Event" },
         color: "var(--cyan-glow)",
       },
       {
@@ -227,8 +234,8 @@ const CATEGORIES: EventCategory[] = [
         location: "Online",
         ageGroup: "8–17 years, with parent sessions available",
         focus: ["AI & digital literacy", "Financial literacy", "Online safety", "Parent digital-literacy sessions"],
-        primaryCta: { label: "Join a Session", href: "#contact" },
-        sponsorCta: { label: "Sponsor a Season", href: "#contact" },
+        primaryCta: { label: "Join a Session",  },
+        sponsorCta: { label: "Sponsor a Session", presetInterest: "Sponsor an Event" },
         color: "var(--electric)",
       },
     ],
@@ -254,8 +261,8 @@ const CATEGORIES: EventCategory[] = [
           "Creativity & sport",
           "Innovation & entrepreneurship",
         ],
-        primaryCta: { label: "Express Interest", href: "#contact" },
-        sponsorCta: { label: "Become a Founding Partner", href: "#contact" },
+        primaryCta: { label: "Express Interest", },
+        sponsorCta: { label: "Become a Founding Partner", presetInterest: "Funding Partnership" },
         color: "var(--gold)",
       },
     ],
@@ -316,18 +323,11 @@ function EventCard({ e, index }: { e: EventItem; index: number }) {
       whileHover={{ y: -6 }}
       className="glass rounded-3xl overflow-hidden hover:glow-shadow transition-all flex flex-col"
     >
-      <div
-        className="h-28 relative overflow-hidden flex items-center justify-center text-5xl"
-        style={{
-          background: `linear-gradient(135deg, ${e.color}, color-mix(in oklab, ${e.color} 40%, transparent))`,
-        }}
-      >
+      <div className="h-28 relative overflow-hidden flex items-center justify-center text-5xl"
+        style={{ background: `linear-gradient(135deg, ${e.color}, color-mix(in oklab, ${e.color} 40%, transparent))` }}>
         <div className="absolute inset-0 adinkra-pattern opacity-50" />
         <span className="relative drop-shadow">{e.emoji}</span>
-
-        <div className="absolute top-3 left-3 glass rounded-full px-3 py-1 text-xs font-medium">
-          {e.tag}
-        </div>
+        <div className="absolute top-3 left-3 glass rounded-full px-3 py-1 text-xs font-medium">{e.tag}</div>
       </div>
 
       <div className="p-5 flex-1 flex flex-col">
@@ -335,15 +335,9 @@ function EventCard({ e, index }: { e: EventItem; index: number }) {
         <p className="text-sm text-muted-foreground mt-1">{e.subtitle}</p>
 
         <div className="mt-4 grid grid-cols-1 gap-1.5 text-xs text-muted-foreground">
-          <span className="inline-flex items-center gap-1.5">
-            <Calendar className="h-3.5 w-3.5 shrink-0" /> {e.date}
-          </span>
-          <span className="inline-flex items-center gap-1.5">
-            <MapPin className="h-3.5 w-3.5 shrink-0" /> {e.location}
-          </span>
-          <span className="inline-flex items-center gap-1.5">
-            <Users className="h-3.5 w-3.5 shrink-0" /> {e.ageGroup}
-          </span>
+          <span className="inline-flex items-center gap-1.5"><Calendar className="h-3.5 w-3.5 shrink-0" /> {e.date}</span>
+          <span className="inline-flex items-center gap-1.5"><MapPin className="h-3.5 w-3.5 shrink-0" /> {e.location}</span>
+          <span className="inline-flex items-center gap-1.5"><Users className="h-3.5 w-3.5 shrink-0" /> {e.ageGroup}</span>
         </div>
 
         {e.focus?.length > 0 && (
@@ -353,25 +347,42 @@ function EventCard({ e, index }: { e: EventItem; index: number }) {
             </div>
             <ul className="text-xs text-muted-foreground space-y-1">
               {e.focus.slice(0, 4).map((f) => (
-                <li key={f} className="flex gap-1.5">
-                  <span className="text-[color:var(--brand-gold)]">•</span>
-                  {f}
-                </li>
+                <li key={f} className="flex gap-1.5"><span className="text-[color:var(--brand-gold)]">•</span>{f}</li>
               ))}
             </ul>
           </div>
         )}
 
         <div className="mt-5 flex flex-wrap gap-2 pt-4 border-t border-border/60">
-          <Button size="sm" className="gradient-bg text-white border-0">
-            <a href={e.primaryCta.href}>{e.primaryCta.label}</a>
-          </Button>
-          <Button size="sm" variant="outline" className="border-2">
-            <a href={e.sponsorCta.href} className="inline-flex items-center gap-1">
-              {e.sponsorCta.label}
-              <ArrowRight className="h-3.5 w-3.5" />
-            </a>
-          </Button>
+          <EnquiryModal
+            title={`Register — ${e.title}`}
+            description="Tell us about the participant and we'll follow up with next steps."
+            trigger={
+              <Button size="sm" className="gradient-bg text-white border-0">
+                {e.primaryCta.label}
+              </Button>
+            }
+          >
+            <RegistrationForm presetEvent={e.title} />
+          </EnquiryModal>
+
+          <EnquiryModal
+            title={`${e.sponsorCta.label} — ${e.title}`}
+            description="Tell us about your organization and how you'd like to support this."
+            trigger={
+              <Button size="sm" variant="outline" className="border-2">
+                <span className="inline-flex items-center gap-1">
+                  {e.sponsorCta.label}
+                  <ArrowRight className="h-3.5 w-3.5" />
+                </span>
+              </Button>
+            }
+          >
+            <PartnershipForm
+              presetInterest={e.sponsorCta.presetInterest ?? e.sponsorCta.label}
+              presetEvent={e.title}
+            />
+          </EnquiryModal>
         </div>
       </div>
     </motion.article>
@@ -398,17 +409,22 @@ function SponsorshipSection() {
             className="rounded-2xl border bg-card p-6 hover:border-[var(--purple-glow)] transition-colors flex flex-col"
           >
             <div className="h-10 w-10 rounded-xl bg-[var(--purple-glow)]/10 flex items-center justify-center text-[var(--purple-glow)] mb-3">
-              <t.icon className="h-5 w-5" />
-            </div>
-            <h3 className="font-semibold">{t.title}</h3>
-            <p className="text-sm text-muted-foreground mt-1 flex-1">{t.desc}</p>
-            <a
-              href="#contact"
-              className="mt-4 inline-flex items-center text-sm font-semibold gradient-text"
-            >
-              {t.cta}
-              <ArrowRight className="ml-1 h-4 w-4 text-[var(--electric)]" />
-            </a>
+      <t.icon className="h-5 w-5" />
+    </div>
+    <h3 className="font-semibold">{t.title}</h3>
+    <p className="text-sm text-muted-foreground mt-1 flex-1">{t.desc}</p>
+    <EnquiryModal
+      title={t.title}
+      description="Tell us about your organization and how you'd like to get involved."
+      trigger={
+        <button className="mt-4 inline-flex items-center text-sm font-semibold gradient-text">
+          {t.cta}
+          <ArrowRight className="ml-1 h-4 w-4 text-[var(--electric)]" />
+        </button>
+      }
+    >
+      <PartnershipForm presetInterest={t.cta} />
+    </EnquiryModal>
           </motion.div>
         ))}
       </div>
@@ -439,24 +455,32 @@ function SponsorshipSection() {
         </div>
 
         <div className="mt-6">
-          <Button size="lg" className="gradient-bg animated-gradient text-white border-0 glow-shadow">
-            <a href="#contact">Request Sponsorship Deck</a>
-          </Button>
+         <EnquiryModal
+    title="Request Sponsorship Deck"
+    description="Tell us about your organization and we'll share our sponsorship deck and next steps."
+    trigger={
+      <Button size="lg" className="gradient-bg animated-gradient text-white border-0 glow-shadow">
+        Request Sponsorship Deck
+      </Button>
+    }
+  >
+    <PartnershipForm presetInterest="Request Sponsorship Deck" />
+  </EnquiryModal>
         </div>
       </motion.div>
     </div>
   );
 }
 
-function RegistrationFunnel() {
-  const audiences = [
-    { emoji: "👨‍👩‍👧", label: "Parents & Guardians", desc: "Register your child for an upcoming learning experience.", cta: "Register a Child" },
-    { emoji: "🏫", label: "Schools", desc: "Invite FunzoCoin Kids to your school or explore a programme partnership.", cta: "Partner With Us" },
-    { emoji: "🏢", label: "Corporates & CSR Teams", desc: "Sponsor an event, school, child or programme.", cta: "Sponsor an Event" },
-    { emoji: "💻", label: "Technology & Professional Partners", desc: "Provide technology, mentorship, expertise or resources.", cta: "Become a Partner" },
-    { emoji: "🤝", label: "Volunteers & Mentors", desc: "Support young learners by sharing your knowledge and experience.", cta: "Volunteer / Mentor" },
-  ];
+const audiences = [
+  { emoji: "👨‍👩‍👧", label: "Parents & Guardians", desc: "Register your child for an upcoming learning experience.", cta: "Register a Child", kind: "registration" as const },
+  { emoji: "🏫", label: "Schools", desc: "Invite FunzoCoin Kids to your school or explore a programme partnership.", cta: "Partner With Us", kind: "partnership" as const },
+  { emoji: "🏢", label: "Corporates & CSR Teams", desc: "Sponsor an event, school, child or programme.", cta: "Sponsor an Event", kind: "partnership" as const },
+  { emoji: "💻", label: "Technology & Professional Partners", desc: "Provide technology, mentorship, expertise or resources.", cta: "Become a Partner", kind: "partnership" as const },
+  { emoji: "🤝", label: "Volunteers & Mentors", desc: "Support young learners by sharing your knowledge and experience.", cta: "Volunteer / Mentor", kind: "partnership" as const },
+];
 
+function RegistrationFunnel() {
   return (
     <div className="mt-16 grid sm:grid-cols-2 lg:grid-cols-5 gap-4">
       {audiences.map((a) => (
@@ -464,10 +488,22 @@ function RegistrationFunnel() {
           <div className="text-3xl mb-2">{a.emoji}</div>
           <div className="font-semibold text-sm">{a.label}</div>
           <p className="text-xs text-muted-foreground mt-1 flex-1">{a.desc}</p>
-          <a href="#contact" className="mt-3 text-xs font-semibold gradient-text inline-flex items-center">
-            {a.cta}
-            <ArrowRight className="ml-1 h-3 w-3 text-[var(--electric)]" />
-          </a>
+          <EnquiryModal
+            title={a.cta}
+            description={
+              a.kind === "registration"
+                ? "Tell us about the participant and we'll follow up with next steps."
+                : "Tell us about your organization and how you'd like to get involved."
+            }
+            trigger={
+              <button className="mt-3 text-xs font-semibold gradient-text inline-flex items-center">
+                {a.cta}
+                <ArrowRight className="ml-1 h-3 w-3 text-[var(--electric)]" />
+              </button>
+            }
+          >
+            {a.kind === "registration" ? <RegistrationForm /> : <PartnershipForm presetInterest={a.cta} />}
+          </EnquiryModal>
         </div>
       ))}
     </div>

@@ -1,8 +1,10 @@
 "use client";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Brain, ArrowRight, CheckCircle2 } from "lucide-react";
-
+import { Brain, CheckCircle2 } from "lucide-react";
+import { EnquiryModal } from "./enquiries";
+import { RegistrationForm } from "./registration-form";
+import { PartnershipForm } from "./partnership-form";
 const fadeUp = {
   hidden: { opacity: 0, y: 30 },
   show: {
@@ -28,7 +30,7 @@ export function Hero() {
         className="watermark right-[-8%] top-[10%] w-[480px] max-w-[60vw] float"
       />
 
-      <div className="mx-auto max-w-7xl w-full grid lg:grid-cols-[1.05fr_0.95fr] gap-10 lg:gap-14 items-center relative">
+      <div className="mx-auto max-w-7xl w-full grid lg:grid-cols-[1.05fr_0.95fr] gap-10 lg:gap-14 items-center  relative">
         <motion.div initial="hidden" animate="show" variants={fadeUp} className="max-w-xl">
           <span className="inline-flex items-center gap-2 rounded-full glass px-3 py-1.5 text-xs font-medium">
             <span className="h-2 w-2 rounded-full bg-[var(--cyan-glow)] animate-pulse" />
@@ -53,24 +55,41 @@ export function Hero() {
           </p>
 
           <div className="mt-6 flex flex-wrap gap-3">
-            <Button size="lg" className="gradient-bg animated-gradient text-white border-0 glow-shadow">
-              <a href="#contact" target="_blank" rel="noopener noreferrer">
-                Partner With Us
-                <ArrowRight className="ml-1 h-4 w-4" />
-              </a>
-            </Button>
+            <EnquiryModal
+              title="Partner With FunzoCoin Kids"
+              description="Tell us a little about your organization and how you'd like to get involved."
+              trigger={
+                <Button size="lg" className="gradient-bg animated-gradient text-white border-0 glow-shadow">
+                  Partner With Us
+                </Button>
+              }
+            >
+              <PartnershipForm />
+            </EnquiryModal>
 
-            <Button size="lg" variant="outline" className="border-2">
-              <a href="#contact" target="_blank" rel="noopener noreferrer">
-                Sponsor a School
-              </a>
-            </Button>
+            <EnquiryModal
+              title="Sponsor a School For FunzoCoin Kids Program"
+              description="Tell us a little about you or your organization and how you'd like to get involved."
+              trigger={
+                <Button size="lg" variant="outline" className="border-2">
+                  Sponsor a School
+                </Button>
+              }
+            >
+              <PartnershipForm presetInterest="Sponsor a School" />
+            </EnquiryModal>
 
-            <Button size="lg" variant="ghost">
-              <a href="#contact" target="_blank" rel="noopener noreferrer">
-                Register a Child
-              </a>
-            </Button>
+            <EnquiryModal
+              title="Enroll a Learner to FunzoCoin Kids Program"
+              description="Tell us about the child you'd like to register."
+              trigger={
+                <Button size="lg" className='border border-gray border-2' variant="ghost">
+                  Register a Child
+                </Button>
+              }
+            >
+              <RegistrationForm />
+            </EnquiryModal>
           </div>
 
           <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-sm text-muted-foreground">

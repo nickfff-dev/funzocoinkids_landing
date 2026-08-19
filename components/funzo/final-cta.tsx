@@ -7,6 +7,7 @@ import {
 import { Section } from "./shared";
 import { PartnershipForm } from "./partnership-form";
 import { EnquiryModal } from "./enquiries";
+import { Button } from "../ui/button";
 
 export function FinalCTA() {
   return (
@@ -34,32 +35,43 @@ export function FinalCTA() {
 
           <div className="mt-8 flex flex-wrap gap-3 justify-center">
             <EnquiryModal
-                  title="Partner With FunzoCoin Kids"
-                  description="Tell us a little about your organization and how you'd like to get involved."
-                  triggerLabel="Become a Partner"
-                  triggerClassName="gradient-bg animated-gradient text-white border-0 glow-shadow"
+              title="Partner With FunzoCoin Kids"
+              description="Tell us a little about your organization and how you'd like to get involved."
+              trigger={
+                <Button size="lg"
+                  className="gradient-bg animated-gradient text-white border-0 glow-shadow">
+                  Become a Partner
+                </Button>
+              }
             >
-              <PartnershipForm  presetInterest="Funding Partnership" />
+              <PartnershipForm />
             </EnquiryModal>
+
             {/* <PartnerTrigger 
             presetInterest="Funding Partnership" 
             className="gradient-bg animated-gradient text-white border-0 glow-shadow"/> */}
-                <EnquiryModal
-                  title="Partner With FunzoCoin Kids"
-                  description="Tell us a little about your organization and how you'd like to get involved."
-                  triggerLabel="Sponsor a Workshop"
-                  triggerClassName="gradient-bg animated-gradient text-white border-0 glow-shadow"
+            <EnquiryModal
+              title="Sponsor a Workshop in FunzoCoin Kids"
+              description="Tell us a little about your organization and how you'd like to get involved."
+              trigger={
+                <Button size="lg" className="gradient-bg animated-gradient text-white border-0 glow-shadow">
+                  Sponsor a Workshop
+                </Button>
+              }
             >
-              <PartnershipForm  presetInterest="Sponsor a Workshop" />
+              <PartnershipForm presetInterest="Sponsor a Workshop" />
             </EnquiryModal>
 
             <EnquiryModal
-                  title="Partner With FunzoCoin Kids"
-                  description="Tell us a little about your organization and how you'd like to get involved."
-                  triggerLabel="Book a Demo"
-                  triggerClassName="gradient-bg animated-gradient text-white border-0 glow-shadow"
+              title="Book a Demo"
+              description="Tell us a little about your organization and what you would like to test"
+              trigger={
+                <Button size="lg" className="gradient-bg animated-gradient text-white border-0 glow-shadow">
+                  Book a Demo
+                </Button>
+              }
             >
-              <PartnershipForm  presetInterest="Other" />
+              <PartnershipForm presetInterest="Other" />
             </EnquiryModal>
           </div>
         </div>
