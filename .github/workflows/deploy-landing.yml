@@ -34,6 +34,7 @@ jobs:
 
             cat <<EOF > .env.local
             NEXT_PUBLIC_LANDING_URL=${{ secrets.NEXT_PUBLIC_LANDING_URL }}
+            NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}
             NODE_ENV=production
             EOF
 
