@@ -17,7 +17,6 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: 22
           script: |
-            sudo apt-get update -y
 
             DEPLOY_BASE="/var/www/${{ secrets.DOMAIN }}"
             TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
@@ -55,6 +54,7 @@ jobs:
             sudo find "$RELEASE_DIR" -type d -exec chmod 2770 {} \;
 
             pnpm install
+            export NEXT_DEPLOYMENT_ID=$(git rev-parse HEAD)
             pnpm build
             if [ $? -ne 0 ]; then
               echo "Build failed"
