@@ -1,66 +1,69 @@
-"use client";
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { CheckCircle2, ChevronLeft, ChevronRight, Check } from "lucide-react";
-import { Field, fieldClass } from "./form-utils";
+"use client"
+import { useState } from "react"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { CheckCircle2, ChevronLeft, ChevronRight, Check } from "lucide-react"
+import { Field, fieldClass } from "./form-utils"
 
 const STEPS = [
   { label: "Participant" },
   { label: "Guardian" },
   { label: "Consent" },
-];
+]
 
 export function RegistrationForm({ presetEvent }: { presetEvent?: string }) {
-  const [step, setStep] = useState(0);
-  const [submitted, setSubmitted] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
+  const [step, setStep] = useState(0)
+  const [submitted, setSubmitted] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
 
   // Step 1: participant
-  const [participantName, setParticipantName] = useState("");
-  const [age, setAge] = useState("");
-  const [school, setSchool] = useState("");
+  const [participantName, setParticipantName] = useState("")
+  const [age, setAge] = useState("")
+  const [school, setSchool] = useState("")
 
   // Step 2: guardian
-  const [guardianName, setGuardianName] = useState("");
-  const [guardianPhone, setGuardianPhone] = useState("");
-  const [guardianEmail, setGuardianEmail] = useState("");
-  const [location, setLocation] = useState("");
-  const [hearAbout, setHearAbout] = useState("");
+  const [guardianName, setGuardianName] = useState("")
+  const [guardianPhone, setGuardianPhone] = useState("")
+  const [guardianEmail, setGuardianEmail] = useState("")
+  const [location, setLocation] = useState("")
+  const [hearAbout, setHearAbout] = useState("")
 
   // Step 3: consent
-  const [c1, setC1] = useState(false);
-  const [c2, setC2] = useState(false);
-  const [c3, setC3] = useState(false);
-  const [c4, setC4] = useState(false);
+  const [c1, setC1] = useState(false)
+  const [c2, setC2] = useState(false)
+  const [c3, setC3] = useState(false)
+  const [c4, setC4] = useState(false)
 
-  const step1Valid = participantName.trim() && age.trim();
+  const step1Valid = participantName.trim() && age.trim()
   const step2Valid =
-    guardianName.trim() && guardianPhone.trim() && guardianEmail.trim() && location.trim();
-  const step3Valid = c1 && c2 && c3 && c4;
+    guardianName.trim() &&
+    guardianPhone.trim() &&
+    guardianEmail.trim() &&
+    location.trim()
+  const step3Valid = c1 && c2 && c3 && c4
 
   function goNext(e?: React.MouseEvent) {
-    e?.preventDefault();
-    e?.stopPropagation();
-    setStep((s) => Math.min(s + 1, STEPS.length - 1));
+    e?.preventDefault()
+    e?.stopPropagation()
+    setStep((s) => Math.min(s + 1, STEPS.length - 1))
   }
 
   function goBack(e?: React.MouseEvent) {
-    e?.preventDefault();
-    e?.stopPropagation();
-    setStep((s) => Math.max(s - 1, 0));
+    e?.preventDefault()
+    e?.stopPropagation()
+    setStep((s) => Math.max(s - 1, 0))
   }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
+    e.preventDefault()
 
     // Guard: only the last step is allowed to actually submit.
     if (step !== STEPS.length - 1) {
-      goNext();
-      return;
+      goNext()
+      return
     }
-
-    setSubmitting(true);
+    const apiUrl = process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "")
+    setSubmitting(true)
 
     const payload = {
       participantName,
@@ -72,56 +75,70 @@ export function RegistrationForm({ presetEvent }: { presetEvent?: string }) {
       location,
       event: presetEvent ?? "General interest",
       hearAbout,
-    };
+    }
 
     // TODO(backend): replace with a real fetch() to your enquiries API,
     // e.g. POST to https://api.funzo.../enquiries/register
-    console.log("Registration submitted", payload);
+    console.log("Registration submitted", payload)
 
-    await new Promise((r) => setTimeout(r, 500));
-    setSubmitting(false);
-    setSubmitted(true);
+    try {
+      const response = await fetch(`${apiUrl}/event-registration`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      })
+
+      if (!response.ok) throw new Error("Registration failed")
+      setSubmitting(false)
+      setSubmitted(true)
+    } catch (err) {
+      console.log(err instanceof Error ? err.message : "unknown error occured")
+    }
+    setSubmitting(false)
+    setSubmitted(true)
   }
 
   if (submitted) {
     return (
-      <div className="text-center py-10">
-        <CheckCircle2 className="h-10 w-10 mx-auto text-[var(--cyan-glow)] mb-3" />
+      <div className="py-10 text-center">
+        <CheckCircle2 className="mx-auto mb-3 h-10 w-10 text-cyan-glow" />
         <p className="font-semibold">Thank you!</p>
-        <p className="text-sm text-muted-foreground mt-1 max-w-sm mx-auto">
+        <p className="mx-auto mt-1 max-w-sm text-sm text-muted-foreground">
           We&apos;ve received your registration and will follow up by email or
           WhatsApp with next steps.
         </p>
       </div>
-    );
+    )
   }
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col">
       {/* Step indicator */}
-      <div className="flex items-center gap-2 mb-6 px-0.5">
+      <div className="mb-6 flex items-center gap-2 px-0.5">
         {STEPS.map((s, i) => {
-          const active = i === step;
-          const done = i < step;
+          const active = i === step
+          const done = i < step
           return (
-            <div key={s.label} className="flex items-center flex-1 last:flex-none">
+            <div key={s.label} className="flex items-center last:flex-none">
               <div className="flex items-center gap-2">
                 <div
                   className={[
-                    "flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-[11px] font-medium border transition-colors",
+                    "flex h-6 w-6 shrink-0 items-center justify-center rounded-full border text-[11px] font-medium transition-colors",
                     done
-                      ? "bg-[var(--purple-glow)] border-[var(--purple-glow)] text-white"
+                      ? "border-purple-glow bg-purple-glow text-white"
                       : active
-                      ? "border-[var(--purple-glow)] text-[var(--purple-glow)]"
-                      : "border-input text-muted-foreground",
+                        ? "border-purple-glow text-purple-glow"
+                        : "border-input text-muted-foreground",
                   ].join(" ")}
                 >
                   {done ? <Check className="h-3.5 w-3.5" /> : i + 1}
                 </div>
                 <span
                   className={[
-                    "text-xs whitespace-nowrap hidden sm:inline",
-                    active ? "text-foreground font-medium" : "text-muted-foreground",
+                    "hidden text-xs whitespace-nowrap sm:inline",
+                    active
+                      ? "font-medium text-foreground"
+                      : "text-muted-foreground",
                   ].join(" ")}
                 >
                   {s.label}
@@ -130,20 +147,20 @@ export function RegistrationForm({ presetEvent }: { presetEvent?: string }) {
               {i < STEPS.length - 1 && (
                 <div
                   className={[
-                    "h-px flex-1 mx-2 transition-colors",
-                    done ? "bg-[var(--purple-glow)]" : "bg-input",
+                    "mx-2 h-px flex-1 transition-colors",
+                    done ? "bg-purple-glow" : "bg-input",
                   ].join(" ")}
                 />
               )}
             </div>
-          );
+          )
         })}
       </div>
 
       {/* Step 1: Participant */}
       {step === 0 && (
         <div className="space-y-4">
-          <div className="grid sm:grid-cols-2 gap-4">
+          <div className="grid gap-4 sm:grid-cols-2">
             <Field label="Participant's name" required>
               <Input
                 required
@@ -193,7 +210,7 @@ export function RegistrationForm({ presetEvent }: { presetEvent?: string }) {
       {/* Step 2: Guardian */}
       {step === 1 && (
         <div className="space-y-4">
-          <div className="grid sm:grid-cols-2 gap-4">
+          <div className="grid gap-4 sm:grid-cols-2">
             <Field label="Parent / Guardian name" required>
               <Input
                 required
@@ -229,7 +246,7 @@ export function RegistrationForm({ presetEvent }: { presetEvent?: string }) {
             />
           </Field>
 
-          <div className="grid sm:grid-cols-2 gap-4">
+          <div className="grid gap-4 sm:grid-cols-2">
             <Field label="Location / County" required>
               <Input
                 required
@@ -257,9 +274,21 @@ export function RegistrationForm({ presetEvent }: { presetEvent?: string }) {
       {step === 2 && (
         <div className="space-y-4">
           <div className="space-y-2.5">
-            <ConsentCheck checked={c1} onChange={setC1} label="I am the parent/guardian of the participant." />
-            <ConsentCheck checked={c2} onChange={setC2} label="I confirm that the information provided is accurate." />
-            <ConsentCheck checked={c3} onChange={setC3} label="I have read the relevant programme information." />
+            <ConsentCheck
+              checked={c1}
+              onChange={setC1}
+              label="I am the parent/guardian of the participant."
+            />
+            <ConsentCheck
+              checked={c2}
+              onChange={setC2}
+              label="I confirm that the information provided is accurate."
+            />
+            <ConsentCheck
+              checked={c3}
+              onChange={setC3}
+              label="I have read the relevant programme information."
+            />
             <ConsentCheck
               checked={c4}
               onChange={setC4}
@@ -267,24 +296,29 @@ export function RegistrationForm({ presetEvent }: { presetEvent?: string }) {
             />
           </div>
 
-          <div className="rounded-lg border border-input bg-muted/30 px-3 py-2.5 space-y-1">
+          <div className="space-y-1 rounded-lg border border-input bg-muted/30 px-3 py-2.5">
             <p className="text-xs text-muted-foreground">
-              <span className="text-foreground/80 font-medium">Participant: </span>
+              <span className="font-medium text-foreground/80">
+                Participant:{" "}
+              </span>
               {participantName || "—"} {age && `(${age})`}
             </p>
             <p className="text-xs text-muted-foreground">
-              <span className="text-foreground/80 font-medium">Event: </span>
+              <span className="font-medium text-foreground/80">Event: </span>
               {presetEvent ?? "General interest"}
             </p>
             <p className="text-xs text-muted-foreground">
-              <span className="text-foreground/80 font-medium">Guardian: </span>
+              <span className="font-medium text-foreground/80">Guardian: </span>
               {guardianName || "—"} · {guardianPhone || "—"}
             </p>
           </div>
 
           <p className="text-[11px] text-muted-foreground">
             Photography/video consent is handled separately — see our{" "}
-            <a href="/child-safeguarding" className="underline underline-offset-2">
+            <a
+              href="/child-safeguarding"
+              className="underline underline-offset-2"
+            >
               Child Safeguarding Policy
             </a>
             .
@@ -293,7 +327,7 @@ export function RegistrationForm({ presetEvent }: { presetEvent?: string }) {
       )}
 
       {/* Navigation */}
-      <div className="flex items-center justify-between mt-6 pt-4 border-t border-input">
+      <div className="mt-6 flex items-center justify-between border-t border-input pt-4">
         <Button
           type="button"
           variant="outline"
@@ -302,7 +336,7 @@ export function RegistrationForm({ presetEvent }: { presetEvent?: string }) {
           disabled={step === 0}
           className={step === 0 ? "invisible" : ""}
         >
-          <ChevronLeft className="h-4 w-4 mr-1" />
+          <ChevronLeft className="mr-1 h-4 w-4" />
           Back
         </Button>
 
@@ -312,24 +346,24 @@ export function RegistrationForm({ presetEvent }: { presetEvent?: string }) {
             size="sm"
             onClick={goNext}
             disabled={step === 0 ? !step1Valid : !step2Valid}
-            className="gradient-bg animated-gradient text-white border-0 glow-shadow"
+            className="gradient-bg animated-gradient glow-shadow border-0 text-white"
           >
             Next
-            <ChevronRight className="h-4 w-4 ml-1" />
+            <ChevronRight className="ml-1 h-4 w-4" />
           </Button>
         ) : (
           <Button
             type="submit"
             size="sm"
             disabled={submitting || !step3Valid}
-            className="gradient-bg animated-gradient text-white border-0 glow-shadow"
+            className="gradient-bg animated-gradient glow-shadow border-0 text-white"
           >
             {submitting ? "Submitting…" : "Submit Registration"}
           </Button>
         )}
       </div>
     </form>
-  );
+  )
 }
 
 function ConsentCheck({
@@ -337,19 +371,19 @@ function ConsentCheck({
   onChange,
   label,
 }: {
-  checked: boolean;
-  onChange: (v: boolean) => void;
-  label: string;
+  checked: boolean
+  onChange: (v: boolean) => void
+  label: string
 }) {
   return (
-    <label className="flex items-start gap-2.5 text-xs text-muted-foreground cursor-pointer">
+    <label className="flex cursor-pointer items-start gap-2.5 text-xs text-muted-foreground">
       <input
         type="checkbox"
         checked={checked}
         onChange={(e) => onChange(e.target.checked)}
-        className="mt-0.5 h-4 w-4 rounded border-input accent-[var(--purple-glow)] shrink-0"
+        className="mt-0.5 h-4 w-4 shrink-0 rounded border-input accent-[var(--purple-glow)]"
       />
       <span>{label}</span>
     </label>
-  );
+  )
 }

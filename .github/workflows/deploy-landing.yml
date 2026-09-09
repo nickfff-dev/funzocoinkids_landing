@@ -18,17 +18,16 @@ jobs:
           port: 22
           script: |
 
+            set -euo pipefail
+
             DEPLOY_BASE="/var/www/${{ secrets.DOMAIN }}"
             TIMESTAMP=$(date +"%Y%m%d_%H%M%S")
             RELEASE_DIR="$DEPLOY_BASE/releases/$TIMESTAMP"
             CURRENT_LINK="$DEPLOY_BASE/current"
-            sudo mkdir -p "$DEPLOY_BASE/releases"
-            sudo chown -R ${{ secrets.USERNAME }}:${{ secrets.USERNAME }} "$DEPLOY_BASE"
-            sudo chmod -R 770 "$DEPLOY_BASE"
-            sudo find "$DEPLOY_BASE" -type d -exec chmod 2770 {} \;
+            mkdir -p "$DEPLOY_BASE/releases"
 
             # Clone the repository into the release directory
-            git clone https://${{ secrets.USER_KEY }}@github.com/nickfff-dev/funzocoinkids_landing.git "$RELEASE_DIR"
+            git --depth 1 --branch master --single-branch https://${{ secrets.USER_KEY }}@github.com/nickfff-dev/funzocoinkids_landing.git "$RELEASE_DIR"
             cd "$RELEASE_DIR"
 
             cat <<EOF > .env.local
@@ -38,34 +37,31 @@ jobs:
             EOF
 
             # Setup Node environment
+            set +u
             export NVM_DIR="/home/${{ secrets.USERNAME }}/.nvm"
             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
             nvm use --lts
+            set -u
 
-            # Ensure pm2 is installed
-            if ! command -v pm2 &> /dev/null; then
-              npm install -g pm2
+
+            # Explicitly set PNPM_HOME and put it on PATH — non-interactive SSH
+            # sessions don't source .bashrc, so `pnpm setup`'s changes never apply here.
+            export PNPM_HOME="/home/${{ secrets.SERVER_USERNAME }}/.local/share/pnpm"
+            export PATH="$PNPM_HOME:$PATH"
+
+            # Ensure pnpm is installed
+            if ! command -v pnpm &> /dev/null; then
+              curl -fsSL https://get.pnpm.io/install.sh | env PNPM_HOME="$PNPM_HOME" sh -
             fi
 
-            # Permissions
-            sudo chown -R ${{ secrets.USERNAME }}:${{ secrets.USERNAME }} "$RELEASE_DIR"
-            sudo chmod -R u+rwX "$RELEASE_DIR"
-            sudo chmod -R g+rwX "$RELEASE_DIR"
-            sudo find "$RELEASE_DIR" -type d -exec chmod 2770 {} \;
+            # Ensure pm2 is installed
+            command -v pm2 &> /dev/null || npm install -g pm2
 
             pnpm install
             export NEXT_DEPLOYMENT_ID=$(git rev-parse HEAD)
-            pnpm build
-            if [ $? -ne 0 ]; then
-              echo "Build failed"
-              exit 1
-            fi
+            export NEXT_SERVER_ACTIONS_ENCRYPTION_KEY=$(openssl rand -base64 32)
 
-            # Set permissions for the release directory
-            sudo chown -R ${{ secrets.USERNAME }}:${{ secrets.USERNAME }} "$RELEASE_DIR"
-            sudo chmod -R 770 "$RELEASE_DIR"
-            sudo chmod -R g+rwX "$RELEASE_DIR"
-            sudo find "$RELEASE_DIR" -type d -exec chmod 2770 {} \;
+
             ln -sfn "$RELEASE_DIR" "$CURRENT_LINK"
 
             # PM2 reload/start
