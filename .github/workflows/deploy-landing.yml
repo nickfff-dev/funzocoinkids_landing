@@ -27,7 +27,7 @@ jobs:
             mkdir -p "$DEPLOY_BASE/releases"
 
             # Clone the repository into the release directory
-            git --depth 1 --branch master --single-branch https://${{ secrets.USER_KEY }}@github.com/nickfff-dev/funzocoinkids_landing.git "$RELEASE_DIR"
+            git clone --depth 1 --branch master --single-branch https://${{ secrets.USER_KEY }}@github.com/nickfff-dev/funzocoinkids_landing.git "$RELEASE_DIR"
             cd "$RELEASE_DIR"
 
             cat <<EOF > .env.local
