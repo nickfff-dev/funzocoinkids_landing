@@ -82,7 +82,7 @@ export function RegistrationForm({ presetEvent }: { presetEvent?: string }) {
     console.log("Registration submitted", payload)
 
     try {
-      const response = await fetch(`${apiUrl}/event-registration`, {
+      const response = await fetch(`${apiUrl}/eventregistration`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(payload),
